@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import InfoTooltip from './InfoTooltip'
 
 function ThumbsDownSection({ data }) {
   const [trendData, setTrendData] = useState([])
@@ -36,28 +37,34 @@ function ThumbsDownSection({ data }) {
       <h3 className="subsection-title">3.1 核心指标</h3>
       <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', maxWidth: '750px' }}>
         <div className="metric-card" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
-          <div className="metric-label">点踩轮次数</div>
+          <div className="metric-label">
+            点踩轮次数
+            <InfoTooltip text="被用户点踩的AI回复数量" />
+          </div>
           <div className="metric-row">
             <span className="metric-tag">昨日</span>
             <span className="metric-value">{data.count}</span>
           </div>
-          <div className="metric-definition">被用户点踩的AI回复数量</div>
         </div>
         <div className="metric-card" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-          <div className="metric-label">点踩人数（去重）</div>
+          <div className="metric-label">
+            点踩人数（去重）
+            <InfoTooltip text="至少点踩1次的用户数（去重）" />
+          </div>
           <div className="metric-row">
             <span className="metric-tag">昨日</span>
             <span className="metric-value">{data.users}</span>
           </div>
-          <div className="metric-definition">至少点踩1次的用户数（去重）</div>
         </div>
         <div className="metric-card" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
-          <div className="metric-label">点踩率</div>
+          <div className="metric-label">
+            点踩率
+            <InfoTooltip text="公式：点踩轮次数 ÷ 总对话轮次数" />
+          </div>
           <div className="metric-row">
             <span className="metric-tag">昨日</span>
             <span className="metric-value">{data.rate}%</span>
           </div>
-          <div className="metric-definition">点踩轮次数 ÷ 总对话轮次数</div>
         </div>
       </div>
 

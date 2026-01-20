@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import InfoTooltip from './InfoTooltip'
 
 function RatingSection({ distribution }) {
   const [trendData, setTrendData] = useState([])
@@ -40,21 +41,31 @@ function RatingSection({ distribution }) {
   return (
     <>
       {/* 评分分布表格 */}
-      <h3 style={{ fontSize: '16px', marginBottom: '12px', color: '#666' }}>
-        评分分布（昨日）
-      </h3>
+      <h3 className="subsection-title">2.1 评分分布（昨日）</h3>
       <table className="rating-table">
         <thead>
           <tr>
             <th>评分</th>
-            <th>人数（去重）</th>
+            <th>
+              人数（去重）
+              <span className="info-tooltip info-tooltip-light">
+                <span className="info-icon">!</span>
+                <span className="tooltip-text">占比 = 该分数人数 ÷ 昨日评分的总人数</span>
+              </span>
+            </th>
             <th>占比</th>
           </tr>
         </thead>
         <tbody>
           {tableData.map((row, index) => (
             <tr key={index}>
-              <td>{row.label}</td>
+              <td>
+                {row.label}
+                <span className="info-tooltip info-tooltip-light">
+                  <span className="info-icon">!</span>
+                  <span className="tooltip-text">{row.definition}</span>
+                </span>
+              </td>
               <td>{row.count}</td>
               <td>{typeof row.percentage === 'number' ? `${row.percentage}%` : row.percentage}</td>
             </tr>
@@ -63,9 +74,7 @@ function RatingSection({ distribution }) {
       </table>
 
       {/* 趋势图 */}
-      <h3 style={{ fontSize: '16px', marginTop: '24px', marginBottom: '12px', color: '#666' }}>
-        评分趋势
-      </h3>
+      <h3 className="subsection-title" style={{ marginTop: '24px' }}>2.2 趋势图</h3>
       <div className="chart-toggle">
         <button
           className={viewType === 'count' ? 'active' : ''}
