@@ -325,19 +325,7 @@ body {
   padding: var(--space-5);
   color: #fff;
   position: relative;
-  overflow: hidden;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
-}
-
-.metric-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  pointer-events: none;
 }
 
 .metric-card:hover {
@@ -475,8 +463,23 @@ body {
   border-collapse: separate;
   border-spacing: 0;
   border-radius: var(--radius-md);
-  overflow: hidden;
   border: 1px solid var(--gray-200);
+}
+
+.rating-table thead tr:first-child th:first-child {
+  border-top-left-radius: var(--radius-md);
+}
+
+.rating-table thead tr:first-child th:last-child {
+  border-top-right-radius: var(--radius-md);
+}
+
+.rating-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.rating-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: var(--radius-md);
 }
 
 .rating-table th,
@@ -516,8 +519,23 @@ body {
   border-spacing: 0;
   font-size: 0.875rem;
   border-radius: var(--radius-md);
-  overflow: hidden;
   border: 1px solid var(--gray-200);
+}
+
+.ab-table thead tr:first-child th:first-child {
+  border-top-left-radius: var(--radius-md);
+}
+
+.ab-table thead tr:first-child th:last-child {
+  border-top-right-radius: var(--radius-md);
+}
+
+.ab-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.ab-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: var(--radius-md);
 }
 
 .ab-table th,
