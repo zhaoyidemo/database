@@ -178,9 +178,89 @@ app.get('/api/thumbsdown/trend', (req, res) => {
   res.json(data);
 });
 
+// 生成AB对比数据（支持days参数）
+function generateABComparisonData(days = 1) {
+  // 基础倍数，days越大数据越大
+  const multiplier = days;
+
+  // A版数据（心理咨询风格）
+  const aConversations = Math.floor((70 + Math.random() * 20) * multiplier);
+  const aInsights = Math.floor(aConversations * (0.6 + Math.random() * 0.15));
+  const aDialogRounds = Math.floor((200 + Math.random() * 50) * multiplier);
+  const aRatings = Math.floor(aInsights * (0.6 + Math.random() * 0.15));
+  const aFiveStar = Math.floor(aRatings * (0.5 + Math.random() * 0.1));
+  const aFourStar = Math.floor(aRatings * (0.25 + Math.random() * 0.1));
+  const aLowStar = aRatings - aFiveStar - aFourStar;
+  const aThumbsDownCount = Math.floor((5 + Math.random() * 10) * multiplier);
+  const aThumbsDownUsers = Math.floor(aThumbsDownCount * (0.6 + Math.random() * 0.2));
+
+  // B版数据（教练技术风格）
+  const bConversations = Math.floor((70 + Math.random() * 20) * multiplier);
+  const bInsights = Math.floor(bConversations * (0.55 + Math.random() * 0.15));
+  const bDialogRounds = Math.floor((200 + Math.random() * 50) * multiplier);
+  const bRatings = Math.floor(bInsights * (0.65 + Math.random() * 0.15));
+  const bFiveStar = Math.floor(bRatings * (0.45 + Math.random() * 0.1));
+  const bFourStar = Math.floor(bRatings * (0.28 + Math.random() * 0.1));
+  const bLowStar = bRatings - bFiveStar - bFourStar;
+  const bThumbsDownCount = Math.floor((6 + Math.random() * 12) * multiplier);
+  const bThumbsDownUsers = Math.floor(bThumbsDownCount * (0.6 + Math.random() * 0.2));
+
+  return {
+    versionA: {
+      conversations: aConversations,
+      insights: aInsights,
+      dialogRounds: aDialogRounds,
+      ratings: aRatings,
+      insightTriggerRate: parseFloat(((aInsights / aConversations) * 100).toFixed(1)),
+      ratingRate: parseFloat(((aRatings / aInsights) * 100).toFixed(1)),
+      fiveStar: {
+        count: aFiveStar,
+        percentage: parseFloat(((aFiveStar / aRatings) * 100).toFixed(1))
+      },
+      fourStar: {
+        count: aFourStar,
+        percentage: parseFloat(((aFourStar / aRatings) * 100).toFixed(1))
+      },
+      lowStar: {
+        count: aLowStar,
+        percentage: parseFloat(((aLowStar / aRatings) * 100).toFixed(1))
+      },
+      unrated: aInsights - aRatings,
+      thumbsDownCount: aThumbsDownCount,
+      thumbsDownUsers: aThumbsDownUsers,
+      thumbsDownRate: parseFloat(((aThumbsDownCount / aDialogRounds) * 100).toFixed(1))
+    },
+    versionB: {
+      conversations: bConversations,
+      insights: bInsights,
+      dialogRounds: bDialogRounds,
+      ratings: bRatings,
+      insightTriggerRate: parseFloat(((bInsights / bConversations) * 100).toFixed(1)),
+      ratingRate: parseFloat(((bRatings / bInsights) * 100).toFixed(1)),
+      fiveStar: {
+        count: bFiveStar,
+        percentage: parseFloat(((bFiveStar / bRatings) * 100).toFixed(1))
+      },
+      fourStar: {
+        count: bFourStar,
+        percentage: parseFloat(((bFourStar / bRatings) * 100).toFixed(1))
+      },
+      lowStar: {
+        count: bLowStar,
+        percentage: parseFloat(((bLowStar / bRatings) * 100).toFixed(1))
+      },
+      unrated: bInsights - bRatings,
+      thumbsDownCount: bThumbsDownCount,
+      thumbsDownUsers: bThumbsDownUsers,
+      thumbsDownRate: parseFloat(((bThumbsDownCount / bDialogRounds) * 100).toFixed(1))
+    }
+  };
+}
+
 // 获取AB对比数据
 app.get('/api/ab-comparison', (req, res) => {
-  res.json(mockData.abComparison);
+  const days = parseInt(req.query.days) || 1;
+  res.json(generateABComparisonData(days));
 });
 
 // 生产环境静态文件服务

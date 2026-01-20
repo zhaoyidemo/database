@@ -1,12 +1,42 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TimeSelector from './TimeSelector'
 
-function ABComparison({ data }) {
+function ABComparison({ data: initialData }) {
   const [timeRange, setTimeRange] = useState('7')
+  const [abData, setAbData] = useState(initialData)
+  const [loading, setLoading] = useState(false)
 
-  if (!data) return null
+  // 获取AB对比数据
+  const fetchABData = async (days) => {
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/ab-comparison?days=${days}`)
+      const result = await response.json()
+      setAbData(result)
+    } catch (error) {
+      console.error('获取AB对比数据失败:', error)
+    }
+    setLoading(false)
+  }
 
-  const { versionA, versionB } = data
+  // 处理自定义日期
+  const handleCustomDateChange = (startDate, endDate) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+    fetchABData(days)
+  }
+
+  // 监听时间范围变化
+  useEffect(() => {
+    if (timeRange !== 'custom') {
+      fetchABData(timeRange)
+    }
+  }, [timeRange])
+
+  if (!abData) return null
+
+  const { versionA, versionB } = abData
 
   const formatDiff = (a, b, isPercentage = false) => {
     const diff = a - b
@@ -51,10 +81,10 @@ function ABComparison({ data }) {
           <strong> A版：</strong>心理咨询风格 |
           <strong> B版：</strong>教练技术风格
         </p>
-        <TimeSelector value={timeRange} onChange={setTimeRange} />
+        <TimeSelector value={timeRange} onChange={setTimeRange} onCustomDateChange={handleCustomDateChange} />
       </div>
 
-      <div className="table-wrapper">
+      <div className="table-wrapper" style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}>
       <table className="ab-table">
         <thead>
           <tr>
