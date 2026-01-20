@@ -10,10 +10,15 @@ function ABComparison({ data }) {
 
   const formatDiff = (a, b, isPercentage = false) => {
     const diff = a - b
+    const arrow = diff > 0 ? '↑' : diff < 0 ? '↓' : ''
     const sign = diff > 0 ? '+' : ''
     const suffix = isPercentage ? '%' : ''
     const className = diff > 0 ? 'positive' : diff < 0 ? 'negative' : ''
-    return <span className={className}>{sign}{diff.toFixed(isPercentage ? 1 : 0)}{suffix}</span>
+    return (
+      <span className={className}>
+        {arrow} {sign}{Math.abs(diff).toFixed(isPercentage ? 1 : 0)}{suffix}
+      </span>
+    )
   }
 
   const rows = [
@@ -34,6 +39,7 @@ function ABComparison({ data }) {
     { label: '未评分人数', a: versionA.unrated, b: versionB.unrated },
     { category: '点踩数据', isCategory: true },
     { label: '点踩轮次数', a: versionA.thumbsDownCount, b: versionB.thumbsDownCount },
+    { label: '点踩人数（去重）', a: versionA.thumbsDownUsers, b: versionB.thumbsDownUsers },
     { label: '点踩率', a: versionA.thumbsDownRate, b: versionB.thumbsDownRate, isPercentage: true }
   ]
 
@@ -48,6 +54,7 @@ function ABComparison({ data }) {
         <TimeSelector value={timeRange} onChange={setTimeRange} />
       </div>
 
+      <div className="table-wrapper">
       <table className="ab-table">
         <thead>
           <tr>
@@ -77,6 +84,7 @@ function ABComparison({ data }) {
           })}
         </tbody>
       </table>
+      </div>
     </>
   )
 }

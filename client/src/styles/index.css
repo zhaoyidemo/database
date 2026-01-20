@@ -85,9 +85,17 @@ body {
 
 /* ===== 头部 ===== */
 .dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: var(--space-8);
   padding-bottom: var(--space-6);
   border-bottom: 1px solid var(--gray-200);
+  gap: var(--space-4);
+}
+
+.header-main {
+  flex: 1;
 }
 
 .dashboard-header h1 {
@@ -98,9 +106,48 @@ body {
   letter-spacing: -0.025em;
 }
 
-.dashboard-header p {
+.header-subtitle {
   color: var(--gray-500);
   font-size: 0.9375rem;
+}
+
+.header-subtitle strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.last-updated {
+  color: var(--gray-400);
+  font-size: 0.8125rem;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--gray-100);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--gray-500);
+  transition: all var(--transition-fast);
+}
+
+.refresh-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.refresh-btn:active {
+  transform: scale(0.95);
 }
 
 /* ===== 区块容器 ===== */
@@ -715,6 +762,16 @@ body {
     padding: var(--space-3);
   }
 
+  .dashboard-header {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .dashboard-header h1 {
     font-size: 1.5rem;
   }
@@ -758,6 +815,19 @@ body {
     width: 100%;
   }
 
+  /* 移动端表格横向滚动 */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--space-4));
+    padding: 0 var(--space-4);
+  }
+
+  .ab-table,
+  .rating-table {
+    min-width: 500px;
+  }
+
   .ab-table {
     font-size: 0.75rem;
   }
@@ -765,6 +835,7 @@ body {
   .ab-table th,
   .ab-table td {
     padding: var(--space-2);
+    white-space: nowrap;
   }
 }
 

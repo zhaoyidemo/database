@@ -60,6 +60,7 @@ function RatingSection({ distribution }) {
     <>
       {/* 评分分布表格 */}
       <h3 className="subsection-title">2.1 评分分布（昨日）</h3>
+      <div className="table-wrapper">
       <table className="rating-table">
         <thead>
           <tr>
@@ -90,6 +91,7 @@ function RatingSection({ distribution }) {
           ))}
         </tbody>
       </table>
+      </div>
 
       {/* 趋势图 */}
       <h3 className="subsection-title" style={{ marginTop: '24px' }}>2.2 趋势图</h3>

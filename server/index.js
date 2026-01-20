@@ -86,6 +86,7 @@ const mockData = {
       lowStar: { count: 5, percentage: 14.3 },
       unrated: 17,
       thumbsDownCount: 8,
+      thumbsDownUsers: 5,      // 点踩人数（去重）
       thumbsDownRate: 3.7
     },
     versionB: {  // 教练技术风格
@@ -100,6 +101,7 @@ const mockData = {
       lowStar: { count: 5, percentage: 15.6 },
       unrated: 14,
       thumbsDownCount: 10,
+      thumbsDownUsers: 7,      // 点踩人数（去重）
       thumbsDownRate: 4.8
     }
   }
