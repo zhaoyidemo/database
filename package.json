@@ -1,0 +1,15 @@
+{
+  "name": "qijia-ai-dashboard",
+  "version": "1.0.0",
+  "description": "齐家AI数据看板 - 实时数据展示与分析",
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "npm run build --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "npm run dev --prefix client"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
