@@ -643,21 +643,19 @@ body {
   opacity: 0;
   position: absolute;
   bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  left: 0;
+  transform: translateY(4px);
   background: var(--gray-800);
   color: #fff;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 400;
   white-space: nowrap;
   z-index: 1000;
   transition: all var(--transition-fast);
-  max-width: 280px;
-  white-space: normal;
   text-align: left;
-  line-height: 1.5;
+  line-height: 1.6;
   box-shadow: var(--shadow-lg);
 }
 
@@ -665,8 +663,7 @@ body {
   content: '';
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 16px;
   border: 6px solid transparent;
   border-top-color: var(--gray-800);
 }
@@ -674,7 +671,7 @@ body {
 .info-tooltip:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 /* 浅色背景下的 tooltip */
