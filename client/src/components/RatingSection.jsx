@@ -9,24 +9,42 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
-import InfoTooltip from './InfoTooltip'
+import TrendTimeSelector from './TrendTimeSelector'
 
 function RatingSection({ distribution }) {
   const [trendData, setTrendData] = useState([])
   const [viewType, setViewType] = useState('count')
+  const [timeRange, setTimeRange] = useState('7')
 
   useEffect(() => {
-    fetchTrendData()
-  }, [])
+    fetchTrendData(timeRange)
+  }, [timeRange])
 
-  const fetchTrendData = async () => {
+  const fetchTrendData = async (days) => {
     try {
-      const response = await fetch('/api/ratings/trend?days=7')
+      const response = await fetch(`/api/ratings/trend?days=${days}`)
       const data = await response.json()
-      setTrendData(data)
+      // 计算占比百分比
+      const dataWithPercentage = data.map(item => {
+        const total = item.fiveStar + item.fourStar + item.lowStar
+        return {
+          ...item,
+          fiveStarPct: total > 0 ? ((item.fiveStar / total) * 100).toFixed(1) : 0,
+          fourStarPct: total > 0 ? ((item.fourStar / total) * 100).toFixed(1) : 0,
+          lowStarPct: total > 0 ? ((item.lowStar / total) * 100).toFixed(1) : 0
+        }
+      })
+      setTrendData(dataWithPercentage)
     } catch (error) {
       console.error('获取评分趋势失败:', error)
     }
+  }
+
+  const handleCustomDateChange = (startDate, endDate) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+    fetchTrendData(days)
   }
 
   if (!distribution) return null
@@ -75,6 +93,11 @@ function RatingSection({ distribution }) {
 
       {/* 趋势图 */}
       <h3 className="subsection-title" style={{ marginTop: '24px' }}>2.2 趋势图</h3>
+      <TrendTimeSelector
+        value={timeRange}
+        onChange={setTimeRange}
+        onCustomDateChange={handleCustomDateChange}
+      />
       <div className="chart-toggle">
         <button
           className={viewType === 'count' ? 'active' : ''}
@@ -94,12 +117,27 @@ function RatingSection({ distribution }) {
           <BarChart data={trendData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-            <YAxis />
-            <Tooltip />
+            <YAxis unit={viewType === 'percentage' ? '%' : ''} />
+            <Tooltip
+              formatter={(value, name) => [
+                viewType === 'percentage' ? `${value}%` : value,
+                name
+              ]}
+            />
             <Legend />
-            <Bar dataKey="fiveStar" name="5分" fill="#10b981" />
-            <Bar dataKey="fourStar" name="4分" fill="#3b82f6" />
-            <Bar dataKey="lowStar" name="低分" fill="#ef4444" />
+            {viewType === 'count' ? (
+              <>
+                <Bar dataKey="fiveStar" name="5分" fill="#10b981" />
+                <Bar dataKey="fourStar" name="4分" fill="#3b82f6" />
+                <Bar dataKey="lowStar" name="低分" fill="#ef4444" />
+              </>
+            ) : (
+              <>
+                <Bar dataKey="fiveStarPct" name="5分占比" fill="#10b981" />
+                <Bar dataKey="fourStarPct" name="4分占比" fill="#3b82f6" />
+                <Bar dataKey="lowStarPct" name="低分占比" fill="#ef4444" />
+              </>
+            )}
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -3,7 +3,7 @@ import CoreMetrics from './components/CoreMetrics'
 import RatingSection from './components/RatingSection'
 import ThumbsDownSection from './components/ThumbsDownSection'
 import ABComparison from './components/ABComparison'
-import TimeSelector from './components/TimeSelector'
+import TrendTimeSelector from './components/TrendTimeSelector'
 import TrendChart from './components/TrendChart'
 
 function App() {
@@ -17,7 +17,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    fetchTrendData(timeRange)
+    if (timeRange !== 'custom') {
+      fetchTrendData(timeRange)
+    }
   }, [timeRange])
 
   const fetchDashboardData = async () => {
@@ -42,6 +44,13 @@ function App() {
     }
   }
 
+  const handleCustomDateChange = (startDate, endDate) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+    fetchTrendData(days)
+  }
+
   if (loading) {
     return <div className="loading">加载中...</div>
   }
@@ -60,8 +69,7 @@ function App() {
           coreMetrics={data?.coreMetrics}
           conversionRates={data?.conversionRates}
         />
-        <TimeSelector value={timeRange} onChange={setTimeRange} />
-        <TrendChart data={trendData} />
+        <TrendChart data={trendData} timeRange={timeRange} onTimeRangeChange={setTimeRange} onCustomDateChange={handleCustomDateChange} />
       </section>
 
       {/* 二、用户评分 */}

@@ -10,23 +10,32 @@ import {
   ResponsiveContainer
 } from 'recharts'
 import InfoTooltip from './InfoTooltip'
+import TrendTimeSelector from './TrendTimeSelector'
 
 function ThumbsDownSection({ data }) {
   const [trendData, setTrendData] = useState([])
   const [viewType, setViewType] = useState('count')
+  const [timeRange, setTimeRange] = useState('7')
 
   useEffect(() => {
-    fetchTrendData()
-  }, [])
+    fetchTrendData(timeRange)
+  }, [timeRange])
 
-  const fetchTrendData = async () => {
+  const fetchTrendData = async (days) => {
     try {
-      const response = await fetch('/api/thumbsdown/trend?days=7')
+      const response = await fetch(`/api/thumbsdown/trend?days=${days}`)
       const result = await response.json()
       setTrendData(result)
     } catch (error) {
       console.error('获取点踩趋势失败:', error)
     }
+  }
+
+  const handleCustomDateChange = (startDate, endDate) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+    fetchTrendData(days)
   }
 
   if (!data) return null
@@ -70,6 +79,11 @@ function ThumbsDownSection({ data }) {
 
       {/* 趋势图 */}
       <h3 className="subsection-title" style={{ marginTop: '24px' }}>3.2 趋势图</h3>
+      <TrendTimeSelector
+        value={timeRange}
+        onChange={setTimeRange}
+        onCustomDateChange={handleCustomDateChange}
+      />
       <div className="chart-toggle">
         <button
           className={viewType === 'count' ? 'active' : ''}

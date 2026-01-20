@@ -9,8 +9,9 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import TrendTimeSelector from './TrendTimeSelector'
 
-function TrendChart({ data }) {
+function TrendChart({ data, timeRange, onTimeRangeChange, onCustomDateChange }) {
   const [chartType, setChartType] = useState('users')
 
   if (!data || data.length === 0) return null
@@ -44,6 +45,11 @@ function TrendChart({ data }) {
   return (
     <div>
       <h3 className="subsection-title">1.3 趋势图</h3>
+      <TrendTimeSelector
+        value={timeRange}
+        onChange={onTimeRangeChange}
+        onCustomDateChange={onCustomDateChange}
+      />
       <div className="chart-toggle">
         <button
           className={chartType === 'users' ? 'active' : ''}
