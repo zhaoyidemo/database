@@ -33,28 +33,48 @@ function ThumbsDownSection({ data }) {
   return (
     <>
       {/* 核心指标 */}
-      <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', maxWidth: '500px' }}>
+      <h3 className="subsection-title">3.1 核心指标</h3>
+      <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', maxWidth: '750px' }}>
         <div className="metric-card" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
-          <div className="metric-label">点踩轮次数（昨日）</div>
-          <div className="metric-value">{data.count}</div>
+          <div className="metric-label">点踩轮次数</div>
+          <div className="metric-row">
+            <span className="metric-tag">昨日</span>
+            <span className="metric-value">{data.count}</span>
+          </div>
+          <div className="metric-definition">被用户点踩的AI回复数量</div>
+        </div>
+        <div className="metric-card" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+          <div className="metric-label">点踩人数（去重）</div>
+          <div className="metric-row">
+            <span className="metric-tag">昨日</span>
+            <span className="metric-value">{data.users}</span>
+          </div>
+          <div className="metric-definition">至少点踩1次的用户数（去重）</div>
         </div>
         <div className="metric-card" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
-          <div className="metric-label">点踩率（昨日）</div>
-          <div className="metric-value">{data.rate}%</div>
-          <div className="metric-sub">点踩轮次数 ÷ 总对话轮次数</div>
+          <div className="metric-label">点踩率</div>
+          <div className="metric-row">
+            <span className="metric-tag">昨日</span>
+            <span className="metric-value">{data.rate}%</span>
+          </div>
+          <div className="metric-definition">点踩轮次数 ÷ 总对话轮次数</div>
         </div>
       </div>
 
       {/* 趋势图 */}
-      <h3 style={{ fontSize: '16px', marginTop: '24px', marginBottom: '12px', color: '#666' }}>
-        点踩趋势
-      </h3>
+      <h3 className="subsection-title" style={{ marginTop: '24px' }}>3.2 趋势图</h3>
       <div className="chart-toggle">
         <button
           className={viewType === 'count' ? 'active' : ''}
           onClick={() => setViewType('count')}
         >
           轮次数
+        </button>
+        <button
+          className={viewType === 'users' ? 'active' : ''}
+          onClick={() => setViewType('users')}
+        >
+          人数
         </button>
         <button
           className={viewType === 'rate' ? 'active' : ''}
@@ -68,10 +88,15 @@ function ThumbsDownSection({ data }) {
           <LineChart data={trendData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-            <YAxis />
-            <Tooltip />
+            <YAxis unit={viewType === 'rate' ? '%' : ''} />
+            <Tooltip
+              formatter={(value, name) => [
+                viewType === 'rate' ? `${value}%` : value,
+                name
+              ]}
+            />
             <Legend />
-            {viewType === 'count' ? (
+            {viewType === 'count' && (
               <Line
                 type="monotone"
                 dataKey="count"
@@ -80,7 +105,18 @@ function ThumbsDownSection({ data }) {
                 strokeWidth={2}
                 dot={{ r: 4 }}
               />
-            ) : (
+            )}
+            {viewType === 'users' && (
+              <Line
+                type="monotone"
+                dataKey="users"
+                name="点踩人数（去重）"
+                stroke="#764ba2"
+                strokeWidth={2}
+                dot={{ r: 4 }}
+              />
+            )}
+            {viewType === 'rate' && (
               <Line
                 type="monotone"
                 dataKey="rate"

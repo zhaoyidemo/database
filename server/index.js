@@ -16,12 +16,18 @@ function generateTrendData(days = 7) {
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
+    const conversations = Math.floor(Math.random() * 200) + 100;
+    const insights = Math.floor(Math.random() * conversations * 0.8) + 20;
+    const ratings = Math.floor(Math.random() * insights * 0.8) + 10;
     data.push({
       date: date.toISOString().split('T')[0],
-      conversations: Math.floor(Math.random() * 200) + 100,
-      insights: Math.floor(Math.random() * 150) + 50,
+      conversations,
+      insights,
       dialogRounds: Math.floor(Math.random() * 500) + 200,
-      ratings: Math.floor(Math.random() * 100) + 30
+      ratings,
+      // 转化率
+      insightTriggerRate: ((insights / conversations) * 100).toFixed(1),
+      ratingRate: ((ratings / insights) * 100).toFixed(1)
     });
   }
   return data;
@@ -61,8 +67,9 @@ const mockData = {
 
   // 点踩数据
   thumbsDown: {
-    count: 18,
-    rate: 4.3
+    count: 18,        // 点踩轮次数
+    users: 12,        // 点踩人数（去重）
+    rate: 4.3         // 点踩率
   },
 
   // AB版本对比数据
@@ -157,9 +164,12 @@ app.get('/api/thumbsdown/trend', (req, res) => {
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
+    const count = Math.floor(Math.random() * 25) + 5;
+    const users = Math.floor(Math.random() * count * 0.8) + 3;
     data.push({
       date: date.toISOString().split('T')[0],
-      count: Math.floor(Math.random() * 25) + 5,
+      count,           // 点踩轮次数
+      users,           // 点踩人数（去重）
       rate: (Math.random() * 5 + 2).toFixed(1)
     });
   }

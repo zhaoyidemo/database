@@ -31,10 +31,10 @@ function RatingSection({ distribution }) {
   if (!distribution) return null
 
   const tableData = [
-    { label: '5分', count: distribution.five.count, percentage: distribution.five.percentage },
-    { label: '4分', count: distribution.four.count, percentage: distribution.four.percentage },
-    { label: '低分（1-3分）', count: distribution.low.count, percentage: distribution.low.percentage },
-    { label: '未评分', count: distribution.unrated.count, percentage: '-' }
+    { label: '5分', count: distribution.five.count, percentage: distribution.five.percentage, definition: '评分为5分的用户数（去重）' },
+    { label: '4分', count: distribution.four.count, percentage: distribution.four.percentage, definition: '评分为4分的用户数（去重）' },
+    { label: '低分（1-3分）', count: distribution.low.count, percentage: distribution.low.percentage, definition: '评分为1-3分的用户数（去重）' },
+    { label: '未评分人数（已生成洞察）', count: distribution.unrated.count, percentage: '-', definition: '已生成洞察但未评分的用户数' }
   ]
 
   return (

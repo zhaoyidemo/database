@@ -18,15 +18,24 @@ function TrendChart({ data }) {
   const chartConfigs = {
     users: {
       lines: [
-        { key: 'conversations', name: '发起对话', color: '#8884d8' },
-        { key: 'insights', name: '生成洞察', color: '#82ca9d' },
+        { key: 'conversations', name: '发起对话人数', color: '#8884d8' },
+        { key: 'insights', name: '生成洞察人数', color: '#82ca9d' },
         { key: 'ratings', name: '评分人数', color: '#ffc658' }
-      ]
+      ],
+      yAxisLabel: '人数'
     },
     rounds: {
       lines: [
         { key: 'dialogRounds', name: '对话轮数', color: '#ff7300' }
-      ]
+      ],
+      yAxisLabel: '轮数'
+    },
+    conversion: {
+      lines: [
+        { key: 'insightTriggerRate', name: '洞察触发率', color: '#4f46e5' },
+        { key: 'ratingRate', name: '评分率', color: '#10b981' }
+      ],
+      yAxisLabel: '百分比(%)'
     }
   }
 
@@ -34,6 +43,7 @@ function TrendChart({ data }) {
 
   return (
     <div>
+      <h3 className="subsection-title">1.3 趋势图</h3>
       <div className="chart-toggle">
         <button
           className={chartType === 'users' ? 'active' : ''}
@@ -47,6 +57,12 @@ function TrendChart({ data }) {
         >
           轮数
         </button>
+        <button
+          className={chartType === 'conversion' ? 'active' : ''}
+          onClick={() => setChartType('conversion')}
+        >
+          转化率
+        </button>
       </div>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height="100%">
@@ -56,8 +72,16 @@ function TrendChart({ data }) {
               dataKey="date"
               tickFormatter={(value) => value.slice(5)}
             />
-            <YAxis />
-            <Tooltip />
+            <YAxis
+              unit={chartType === 'conversion' ? '%' : ''}
+              domain={chartType === 'conversion' ? [0, 100] : ['auto', 'auto']}
+            />
+            <Tooltip
+              formatter={(value, name) => [
+                chartType === 'conversion' ? `${value}%` : value,
+                name
+              ]}
+            />
             <Legend />
             {config.lines.map((line) => (
               <Line
