@@ -1,6 +1,7 @@
 // API 配置
-// 真实后端 API 地址
-export const API_BASE_URL = 'http://47.116.208.226:9000/api'
+// 生产环境使用相对路径（通过服务器代理），开发环境直接访问
+const isDev = import.meta.env.DEV
+export const API_BASE_URL = isDev ? 'http://47.116.208.226:9000/api' : '/api'
 
 // API 端点
 export const API_ENDPOINTS = {

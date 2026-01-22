@@ -1,13 +1,29 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// 真实后端 API 地址
+const REAL_API_URL = 'http://47.116.208.226:9000';
+
 app.use(cors());
 app.use(express.json());
+
+// 生产环境：代理 /api 请求到真实后端
+if (process.env.NODE_ENV === 'production') {
+  app.use('/api', createProxyMiddleware({
+    target: REAL_API_URL,
+    changeOrigin: true,
+    onError: (err, req, res) => {
+      console.error('代理错误:', err);
+      res.status(500).json({ error: '代理请求失败' });
+    }
+  }));
+}
 
 // 生成模拟趋势数据
 function generateTrendData(days = 7) {
