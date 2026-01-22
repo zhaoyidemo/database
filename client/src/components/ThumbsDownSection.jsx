@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import InfoTooltip from './InfoTooltip'
 import TrendTimeSelector from './TrendTimeSelector'
+import { API_ENDPOINTS } from '../config/api'
 
 function ThumbsDownSection({ data }) {
   const [trendData, setTrendData] = useState([])
@@ -23,7 +24,7 @@ function ThumbsDownSection({ data }) {
 
   const fetchTrendData = async (days) => {
     try {
-      const response = await fetch(`/api/thumbsdown/trend?days=${days}`)
+      const response = await fetch(`${API_ENDPOINTS.thumbsdownTrend}?days=${days}`)
       const result = await response.json()
       setTrendData(result)
     } catch (error) {

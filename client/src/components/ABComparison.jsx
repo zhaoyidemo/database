@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import TimeSelector from './TimeSelector'
+import { API_ENDPOINTS } from '../config/api'
 
 function ABComparison({ data: initialData }) {
   const [timeRange, setTimeRange] = useState('7')
@@ -10,7 +11,7 @@ function ABComparison({ data: initialData }) {
   const fetchABData = async (days) => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/ab-comparison?days=${days}`)
+      const response = await fetch(`${API_ENDPOINTS.abComparison}?days=${days}`)
       const result = await response.json()
       setAbData(result)
     } catch (error) {

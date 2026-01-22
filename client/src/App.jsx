@@ -4,6 +4,7 @@ import RatingSection from './components/RatingSection'
 import ThumbsDownSection from './components/ThumbsDownSection'
 import ABComparison from './components/ABComparison'
 import TrendChart from './components/TrendChart'
+import { API_ENDPOINTS } from './config/api'
 
 function App() {
   const [data, setData] = useState(null)
@@ -35,7 +36,7 @@ function App() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('/api/dashboard')
+      const response = await fetch(API_ENDPOINTS.dashboard)
       const result = await response.json()
       setData(result)
       setLastUpdated(new Date())
@@ -48,7 +49,7 @@ function App() {
 
   const fetchTrendData = async (days) => {
     try {
-      const response = await fetch(`/api/trends?days=${days}`)
+      const response = await fetch(`${API_ENDPOINTS.trends}?days=${days}`)
       const result = await response.json()
       setTrendData(result)
     } catch (error) {

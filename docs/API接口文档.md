@@ -37,7 +37,7 @@
 
 ### 基础信息
 
-- **Base URL**: `http://{host}:{port}/api`
+- **Base URL**: `http://47.116.208.226:9000/api`
 - **数据格式**: JSON
 - **字符编码**: UTF-8
 - **日期格式**: ISO 8601（`YYYY-MM-DD`）

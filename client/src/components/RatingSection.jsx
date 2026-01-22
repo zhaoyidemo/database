@@ -10,6 +10,7 @@ import {
   ResponsiveContainer
 } from 'recharts'
 import TrendTimeSelector from './TrendTimeSelector'
+import { API_ENDPOINTS } from '../config/api'
 
 function RatingSection({ distribution }) {
   const [trendData, setTrendData] = useState([])
@@ -22,7 +23,7 @@ function RatingSection({ distribution }) {
 
   const fetchTrendData = async (days) => {
     try {
-      const response = await fetch(`/api/ratings/trend?days=${days}`)
+      const response = await fetch(`${API_ENDPOINTS.ratingsTrend}?days=${days}`)
       const data = await response.json()
       // 计算占比百分比
       const dataWithPercentage = data.map(item => {
